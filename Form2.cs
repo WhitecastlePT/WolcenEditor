@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace WolcenEditor
 {
-    public partial class Form2 : Form
+    public partial class WolcenSplashScreen : Form
     {
-        public Form2()
+        public WolcenSplashScreen()
         {
             InitializeComponent();
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
