@@ -51,12 +51,19 @@ namespace WolcenEditor
                 this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH = SystemSaveGameFolderPath + "\\wolcen\\savegames\\characters";
                 this.playerchest = LoadFileJSONFromPath(this.PLAYER_CHEST_JSON_FILE_PATH);
                 this.playerdata = LoadFileJSONFromPath(this.PLAYER_DATA_JSON_FILE_PATH);
-                PopulateCharacterCombobox();
+                this.PopulateCharacterCombobox();
                 textBox1.Text = this.playercharacter.ToString();
+
+
 
             }
 
             t.Abort();
+        }
+
+        public string GetValueFromJSONobj()
+        {
+
         }
 
         private void PopulateCharacterCombobox()
@@ -66,9 +73,9 @@ namespace WolcenEditor
             bs.DataSource = charactersList;
             comboBox1.DataSource = bs;
 
-            if(charactersList.Count == 1)
+            if(charactersList.Count == 2)
             {
-                this.playercharacter = LoadFileJSONFromPath(this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH+"\\"+charactersList[0]);
+                this.playercharacter = LoadFileJSONFromPath(this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH+"\\"+charactersList[1]);
             }
         }
         private List<string> GetCharactersList()
@@ -76,7 +83,7 @@ namespace WolcenEditor
             DirectoryInfo d = new DirectoryInfo(@""+ this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH);
             FileInfo[] Files = d.GetFiles("*.json"); //Getting Text files
             List<string> filelist = new List<string>();
-           
+            filelist.Add("[Select Character]");
             foreach (FileInfo file in Files)
             {
                 filelist.Add(file.Name);
@@ -111,6 +118,15 @@ namespace WolcenEditor
             SHGetKnownFolderPath(SavedGames, 0, IntPtr.Zero, out pPath);
             this.SystemSaveGameFolderPath = System.Runtime.InteropServices.Marshal.PtrToStringUni(pPath);
             System.Runtime.InteropServices.Marshal.FreeCoTaskMem(pPath);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           // ComboBox comboBox = (ComboBox)sender;
+
+          //  string selectedCharacter = (string)ComboBox1.SelectedItem;
+
+
         }
     }
 }
