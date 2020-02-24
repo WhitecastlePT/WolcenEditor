@@ -28,7 +28,7 @@ namespace WolcenEditor
 
         private string PLAYER_DATA_JSON_FILE_PATH = "";
         private string PLAYER_CHEST_JSON_FILE_PATH = "";
-        private string PLAYER_CHARACTER_NAME_JSON_FILE_PATH = "";//Populated after choosing characters
+        private string PLAYER_CHARACTER_NAME_JSON_FILE_PATH = "";
         private JObject playerchest;
         private JObject playerdata;
         private JObject playercharacter;
@@ -45,18 +45,43 @@ namespace WolcenEditor
 
             if (Environment.OSVersion.Version.Major >= 6)
             {
-                getSavedGamesUserPath();//populates SystemSaveGameFolderPath
+                this.getSavedGamesUserPath();//populates SystemSaveGameFolderPath
                 this.PLAYER_CHEST_JSON_FILE_PATH = SystemSaveGameFolderPath + "\\wolcen\\savegames\\playerchest.json";
                 this.PLAYER_DATA_JSON_FILE_PATH = SystemSaveGameFolderPath + "\\wolcen\\savegames\\playerdata.json";
-
-
-
-
-
+                this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH = SystemSaveGameFolderPath + "\\wolcen\\savegames\\characters";
+                this.playerchest = LoadFileJSONFromPath(this.PLAYER_CHEST_JSON_FILE_PATH);
+                this.playerdata = LoadFileJSONFromPath(this.PLAYER_DATA_JSON_FILE_PATH);
+                PopulateCharacterCombobox();
+                textBox1.Text = this.playercharacter.ToString();
 
             }
 
             t.Abort();
+        }
+
+        private void PopulateCharacterCombobox()
+        {
+            BindingSource bs = new BindingSource();
+            List<string> charactersList = GetCharactersList();
+            bs.DataSource = charactersList;
+            comboBox1.DataSource = bs;
+
+            if(charactersList.Count == 1)
+            {
+                this.playercharacter = LoadFileJSONFromPath(this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH+"\\"+charactersList[0]);
+            }
+        }
+        private List<string> GetCharactersList()
+        {
+            DirectoryInfo d = new DirectoryInfo(@""+ this.PLAYER_CHARACTER_NAME_JSON_FILE_PATH);
+            FileInfo[] Files = d.GetFiles("*.json"); //Getting Text files
+            List<string> filelist = new List<string>();
+           
+            foreach (FileInfo file in Files)
+            {
+                filelist.Add(file.Name);
+            }
+            return filelist;
         }
 
         public void StartProgram()
